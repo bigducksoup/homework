@@ -47,6 +47,8 @@ public class Msg implements Serializable {
      */
     private Integer ifsend;
 
+    private String type;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

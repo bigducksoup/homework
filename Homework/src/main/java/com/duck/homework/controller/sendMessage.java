@@ -14,6 +14,7 @@ import com.duck.homework.service.MsgService;
 import com.duck.homework.websocket.webSocketUsers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.websocket.Session;
 import java.time.LocalDateTime;
@@ -36,7 +37,7 @@ public class sendMessage {
     private FriendService friendService;
 
     @SaCheckLogin
-    @PostMapping
+    @PostMapping("/text")
     public Result send(@RequestParam String userId,
                        @RequestParam String targetId,
                        @RequestParam String msg
@@ -85,6 +86,18 @@ public class sendMessage {
         }
         return new Result(200,"success",null);
 
+    }
+
+
+
+    @PostMapping("/img")
+    public Result sendimg(@RequestParam MultipartFile file,@RequestParam String targetId,@RequestHeader String token){
+        //TODO 发送并上传图片
+
+
+
+
+        return null;
     }
 
 }

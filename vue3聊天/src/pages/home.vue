@@ -76,7 +76,7 @@ const send = () => {
 		headers: {
 			token: store.state.user.token
 		},
-		url: global.baseurl + '/sendMsg'
+		url: global.baseurl + '/sendMsg/text'
 
 	}).then(res => {
 		if (res.data.code == 200) {
@@ -145,7 +145,7 @@ body {
 
 #inp {
 	position: absolute;
-	width: 1265px;
+	width: 89%;
 	left: 170px;
 	top: -152px;
 

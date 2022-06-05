@@ -18,7 +18,7 @@ import store from '../store';
 
 <style >
 	#bar{
-		width: 1438px;
+		width: 100%;
 		height: 50px;
 		background-color: #30b5fd;
 		text-align: center;

@@ -82,7 +82,7 @@ onMounted(() => {
 
 <style>
 #message {
-	width: 1265px;
+	width: 89%;
 	background-color: antiquewhite;
 	height: 75%;
 	position: absolute;
