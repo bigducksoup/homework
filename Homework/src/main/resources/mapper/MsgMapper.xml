@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.duck.homework.mapper.MsgMapper">
+
+    <resultMap id="BaseResultMap" type="com.duck.homework.entity.Msg">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="fromid" column="fromId" jdbcType="VARCHAR"/>
+            <result property="toid" column="toId" jdbcType="VARCHAR"/>
+            <result property="msg" column="msg" jdbcType="VARCHAR"/>
+            <result property="creatime" column="creatime" jdbcType="TIMESTAMP"/>
+            <result property="ifsend" column="ifsend" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,fromId,toId,
+        msg,creatime,ifsend
+    </sql>
+</mapper>
