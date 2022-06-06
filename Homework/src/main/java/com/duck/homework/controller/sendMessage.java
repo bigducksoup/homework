@@ -2,6 +2,7 @@ package com.duck.homework.controller;
 
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
@@ -11,7 +12,10 @@ import com.duck.homework.result.Result;
 import com.duck.homework.result.websocketResult;
 import com.duck.homework.service.FriendService;
 import com.duck.homework.service.MsgService;
+import com.duck.homework.service.SaveFileService;
 import com.duck.homework.websocket.webSocketUsers;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +36,8 @@ public class sendMessage {
     @Autowired
     private MsgService msgService;
 
+    @Autowired
+    private SaveFileService saveFileService;
 
     @Autowired
     private FriendService friendService;
@@ -93,11 +99,41 @@ public class sendMessage {
     @PostMapping("/img")
     public Result sendimg(@RequestParam MultipartFile file,@RequestParam String targetId,@RequestHeader String token){
         //TODO 发送并上传图片
+        String id = (String) StpUtil.getLoginIdByToken(token);
+        //保存图片
+        String imgName = UUID.randomUUID().toString();
+        boolean b = saveFileService.saveFile(file, imgName);
+        if (!b){
+            return new Result(400,"failed",null);
+        }
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        Msg msg = new Msg();
+        msg.setId(imgName);
+        msg.setFromid(id);
+        msg.setToid(targetId);
+        msg.setType("img");
+        msg.setMsg("http://127.0.0.1:8081/"+imgName+extension);
 
 
 
+        Session session = webSocketUsers.getUsers().get(targetId);
+        if (session!=null){
+            msg.setIfsend(1);
+            msgService.save(msg);
+            websocketResult websocketResult = new websocketResult();
+            websocketResult.setId(id);
+            websocketResult.setMsg(msg.getMsg());
+            websocketResult.setType("img");
+            websocketResult.setTime(LocalDateTime.now());
+            session.getAsyncRemote().sendText(JSON.toJSONString(websocketResult));
+        }
+        else{
+            msg.setIfsend(0);
+            msgService.save(msg);
+        }
 
-        return null;
+
+        return new Result(200,"success",msg.getMsg());
     }
 
 }
