@@ -102,6 +102,7 @@ const send = () => {
 				localStorage.setItem(store.state.target.id, JSON.stringify(mid))
 			}
 		} else {
+			console.log(res);
 			window.alert('发送失败');
 		}
 	}).catch(e => {

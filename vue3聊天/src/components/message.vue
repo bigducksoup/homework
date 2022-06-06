@@ -7,7 +7,7 @@
 			<div id="text" v-for="(item, index) in store.state.msglist">
 				<!-- <img v-bind:src="store.state.target.avatar" style="height: 50px;width:50px"  /> -->
 
-				<div v-bind:class="item.id == store.state.user.id ? 't2' : 't1'"> <span style="margin: 10px;">{{
+				<div v-bind:class="item.id == store.state.user.id ? 't2' : 't1'"> <span >{{
 						item.msg
 				}}</span> </div>
 			</div>
@@ -96,22 +96,23 @@ onMounted(() => {
 	width: 1265px;
 	background-color: antiquewhite;
 	top: 10px;
-	margin: 0px;
-	padding: 10px 10px 10px 10px;
+	margin: 50px;
+	/* padding: 10px 10px 10px 10px; */
 
 }
 
 .t2 {
-	position: relative;
+	position: absolute;
 	float: none;
-	left: 1000px;
-	width: 200px;
+	right: 25px;
+	width: auto;
 	height: auto;
 	background-color: aquamarine;
-	border-radius: 20px;
+	border-radius: 5px;
 	text-align: center;
 	padding: 10px 10px 10px 10px;
-
+	/* margin: 10px; */
+	
 
 }
 
@@ -119,10 +120,10 @@ onMounted(() => {
 	float: none;
 	position: relative;
 	right: -20px;
-	width: 200px;
+	width: auto;
 	height: auto;
 	background-color: aquamarine;
-	border-radius: 20px;
+	border-radius: 5px;
 	text-align: center;
 	padding: 10px 10px 10px 10px;
 
