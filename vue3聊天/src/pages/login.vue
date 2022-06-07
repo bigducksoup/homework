@@ -92,6 +92,8 @@ const submit = (acc: string, pwd: string) => {
 			store.state.user.id = res.data.data.id;
 			store.state.user.nickname = res.data.data.nickname;
 			store.state.user.token = res.data.data.token;
+			store.state.user.avatar = res.data.data.avatar;
+			console.log(res);
 			console.log(store.state);
 			localStorage.setItem('vuetoken', res.data.data.token);
 			router.push('/home');

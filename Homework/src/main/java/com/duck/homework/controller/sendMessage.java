@@ -6,6 +6,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.duck.homework.VO.img;
 import com.duck.homework.entity.Friend;
 import com.duck.homework.entity.Msg;
 import com.duck.homework.result.Result;
@@ -68,6 +69,7 @@ public class sendMessage {
         msg1.setMsg(msg);
         msg1.setFromid(userId);
         msg1.setToid(targetId);
+        msg1.setType("text");
         msg1.setCreatime(LocalDateTime.now());
         msg1.setId(UUID.randomUUID().toString());
 
@@ -96,23 +98,26 @@ public class sendMessage {
 
 
 
+    @SaCheckLogin
     @PostMapping("/img")
-    public Result sendimg(@RequestParam MultipartFile file,@RequestParam String targetId,@RequestHeader String token){
+    public Result sendimg(@RequestParam MultipartFile file, @RequestParam String targetId, @RequestHeader String token){
         //TODO 发送并上传图片
         String id = (String) StpUtil.getLoginIdByToken(token);
         //保存图片
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         String imgName = UUID.randomUUID().toString();
-        boolean b = saveFileService.saveFile(file, imgName);
+        boolean b = saveFileService.saveFile(file, imgName+'.'+extension);
         if (!b){
             return new Result(400,"failed",null);
         }
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+
         Msg msg = new Msg();
         msg.setId(imgName);
         msg.setFromid(id);
         msg.setToid(targetId);
         msg.setType("img");
-        msg.setMsg("http://127.0.0.1:8081/"+imgName+extension);
+        msg.setCreatime(LocalDateTime.now());
+        msg.setMsg("http://localhost:90/"+"imgmsg/"+imgName+'.'+extension);
 
 
 

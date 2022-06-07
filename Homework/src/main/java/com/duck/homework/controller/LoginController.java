@@ -39,6 +39,7 @@ public class LoginController {
             map.put(tokenInfo.getTokenName(),tokenInfo.getTokenValue());
             map.put("nickname", one.getNickname());
             map.put("id", one.getId());
+            map.put("avatar",one.getAvatar());
             return  new Result(200,"success",map);
         }
         return new Result(400,"failed",null);

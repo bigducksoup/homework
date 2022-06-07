@@ -3,14 +3,22 @@
 
 	<div id="message">
 
-		<el-scrollbar>
-			<div id="text" v-for="(item, index) in store.state.msglist">
-				<!-- <img v-bind:src="store.state.target.avatar" style="height: 50px;width:50px"  /> -->
+		<el-scrollbar >
+			<!-- <div id="message1" style="height:600px;width: 100%;"> -->
+			<div id="text" v-for="(item,index) in store.state.msglist">
+				<img  v-bind:class="item.id == store.state.user.id? 'avt2':'avt1'"  v-bind:src="item.id == store.state.user.id? store.state.user.avatar:store.state.target.avatar"/>
 
-				<div v-bind:class="item.id == store.state.user.id ? 't2' : 't1'"> <span >{{
+				 <div v-bind:class="item.id == store.state.user.id ? 't2' : 't1'"> <span v-if="item.type=='text'" >{{
 						item.msg
-				}}</span> </div>
+				}}</span> 
+				<img v-else style="height: 500px;" :src="item.msg">
+				
+
+				</div>			
 			</div>
+			<!-- </div> -->
+					
+
 		</el-scrollbar>
 
 	</div>
@@ -23,8 +31,11 @@
 <script setup lang="ts">
 import global from '../global';
 import store from '../store';
-import { onMounted, ref, reactive } from 'vue';
+import { onMounted, ref, reactive, watch } from 'vue';
+import { mapGetters } from 'vuex';
 
+
+const content = ref('');
 
 
 
@@ -51,8 +62,20 @@ const close = () => {
 
 const message = (msg: any) => {
 	console.log(msg);
-	store.state.msglist.push(JSON.parse(msg.data));
+	if(msg.data=="连接成功"){
+		return;
+	}
+	let msgcontent = JSON.parse(msg.data)
 
+	if(msgcontent.type=='text'||msgcontent.type=='img'){
+	store.state.msglist.push(msgcontent);
+
+	//testing
+
+	
+
+
+	//back
 	let m = JSON.parse(msg.data);
 	let msgli = localStorage.getItem(store.state.target.id);
 	if (msgli != null) {
@@ -65,6 +88,11 @@ const message = (msg: any) => {
 		mid.push(m);
 		localStorage.setItem(store.state.target.id, JSON.stringify(mid))
 	}
+	}else if(msgcontent.type=='friendReauest'){
+
+	}else{
+
+	}
 }
 
 
@@ -74,7 +102,6 @@ onMounted(() => {
 	init();
 
 })
-
 
 
 
@@ -91,41 +118,73 @@ onMounted(() => {
 }
 
 #text {
-	display: flex;
+	/* display: flex; */
 	position: relative;
-	width: 1265px;
+	/* float: inline-start; */
+	left: 1px;
+	height: auto;
+	width: 99%;
 	background-color: antiquewhite;
 	top: 10px;
-	margin: 50px;
-	/* padding: 10px 10px 10px 10px; */
+	margin: 0px;
+	overflow: hidden;
 
 }
 
 .t2 {
-	position: absolute;
+	position: relative;
 	float: none;
-	right: 25px;
-	width: auto;
+	display: flex;
+	top:0;
+	right: 20px;
+	width: fit-content;
 	height: auto;
 	background-color: aquamarine;
 	border-radius: 5px;
 	text-align: center;
 	padding: 10px 10px 10px 10px;
+	margin: 10px;
+	float: right;
 	/* margin: 10px; */
 	
 
 }
 
+
 .t1 {
+	display: flex;
 	float: none;
 	position: relative;
-	right: -20px;
-	width: auto;
+	left: 20px;
+	top:0;
+	width: fit-content;
 	height: auto;
 	background-color: aquamarine;
 	border-radius: 5px;
 	text-align: center;
 	padding: 10px 10px 10px 10px;
+	margin: 10px;
+}
+
+.avt2{
+
+	position: relative;
+	height: 40px;
+	width: 40px;
+	border-radius: 50%;
+	top: 10px;
+	float: right;
+}
+
+.avt1{
+	 /* style="height: 50px;width:50px;border-radius: 50%;" */
+	position: relative;
+	height: 40px;
+	top:10px;
+	width: 40px;
+	border-radius: 50%;
+	float: left;
+
 
 }
 </style>

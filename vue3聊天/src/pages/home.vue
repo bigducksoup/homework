@@ -13,6 +13,20 @@
 	<el-button id="send" type="primary" style="width: 80px;" @click="send">发送</el-button>
 	<el-button id="cancle" style="width: 80px;" @click="clear">清空</el-button>
 
+
+	<el-upload
+    class="upload"
+	:headers="headers"
+	:data={targetId:store.state.target.id}
+    action="http://localhost:8081/sendMsg/img"
+    multiple
+	:on-success="uploadsuccess"
+  >
+    <el-button id="upload" type="primary">Click to upload</el-button>
+
+  </el-upload>
+
+
 	<el-popover placement="top-start" title="Title" :width="200" trigger="hover">
 		<template #reference>
 			<el-button id="emojibtn">😀</el-button>
@@ -38,6 +52,7 @@
 
 <script setup lang="ts">
 
+import { ElMessage, ElMessageBox } from 'element-plus'
 // import Input from '../components/input.vue';
 import headbar from '../components/headbar.vue';
 import list from '../components/list.vue';
@@ -50,6 +65,12 @@ import emoji from '../assets/emojis.json';
 const textarea = ref('')
 
 
+const headers = reactive({
+	token:store.state.user.token
+})
+const data = reactive({
+	"targetId":store.state.target.id
+})
 
 
 
@@ -62,6 +83,32 @@ const clear = ()=>{
 	textarea.value='';
 }
 
+
+const uploadsuccess = (res:any) =>{
+	console.log(res);
+	if(res.code==200){
+		let m = {
+				id: store.state.user.id,
+				type: 'img',
+				msg: res.data
+			}
+			// console.log(store.state.msglist);
+			// textarea.value = '';
+			store.state.msglist.push(m);
+			let msgli = localStorage.getItem(store.state.target.id);
+			if (msgli != null) {
+				let mid = JSON.parse(msgli);
+				mid.push(m);
+				localStorage.removeItem(store.state.target.id);
+				localStorage.setItem(store.state.target.id, JSON.stringify(mid))
+			} else {
+				let mid = [];
+				mid.push(m);
+				localStorage.setItem(store.state.target.id, JSON.stringify(mid))
+			}
+		console.log(store.state.msglist);
+	}
+}
 
 const send = () => {
 
@@ -90,6 +137,7 @@ const send = () => {
 			console.log(store.state.msglist);
 			textarea.value = '';
 			store.state.msglist.push(m);
+
 			let msgli = localStorage.getItem(store.state.target.id);
 			if (msgli != null) {
 				let mid = JSON.parse(msgli);
@@ -181,6 +229,12 @@ body {
 #emojibtn {
 	position: absolute;
 	right: 210px;
+	bottom: 1px;
+}
+
+#upload {
+	position: absolute;
+	right: 310px;
 	bottom: 1px;
 }
 

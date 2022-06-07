@@ -21,7 +21,7 @@ public class SaveFileServiceImpl implements SaveFileService {
 
 
         //文件路径
-        String filePath = "D:\\datas\\";
+        String filePath = "D:\\datas\\imgmsg\\";
         File temp = new File(filePath);
         if (!temp.exists()){
             temp.mkdirs();
