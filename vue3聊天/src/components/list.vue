@@ -19,7 +19,7 @@
 
 
 		</el-menu>
-
+		<el-button id="refresh" @click="refresh">refresh</el-button>
 
 	</div>
 
@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { onBeforeMount, onMounted, reactive, ref, watch } from 'vue';
 import axios from 'axios';
 import global from '../global';
 import store from '../store';
@@ -66,6 +66,26 @@ const handleselect = (key:any,keypath:string[],item:any)=>{
 
 }
 
+const refresh = ()=>{
+	axios({
+
+		method:'get',
+		url:global.baseurl+'/user/friendlist',
+		headers:{
+			token:store.state.user.token
+		}
+
+	}).then(res => {
+		if(res.data.code==200){
+
+			list.value=res.data.data;
+
+
+		}
+	}).catch(e => {
+		console.log("no friend");
+	})
+}
 
 
 onBeforeMount(() => {
@@ -85,14 +105,42 @@ onBeforeMount(() => {
 
 		}
 	}).catch(e => {
-
+		console.log("no friend");
 	})
 })
+
+watch(()=>store.state.friendlist,(o,n)=>{
+	axios({
+
+		method:'get',
+		url:global.baseurl+'/user/friendlist',
+		headers:{
+			token:store.state.user.token
+		}
+
+	}).then(res => {
+		if(res.data.code==200){
+
+			list.value=res.data.data;
+
+
+		}
+	}).catch(e => {
+		console.log("no friend");
+	})
+})
+
 
 
 </script>
 
 <style>
+
+#refresh {
+	position: relative;
+	left: 50px;
+}
+
 #list {
 	width: 170px;
 	height: 93%;

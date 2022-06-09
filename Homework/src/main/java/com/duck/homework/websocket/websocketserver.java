@@ -28,6 +28,7 @@ public class websocketserver {
     @OnClose
     public void onclose(Session session){
         webSocketUsers.remove(session);
+        System.out.println(session+"removed");
     }
 
 

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/message")
 public class MessageController {
@@ -40,16 +41,22 @@ public class MessageController {
         firstmap.put(Msg::getIfsend,0);
         List<Msg> msgList1 = msgService.list(new LambdaQueryWrapper<Msg>().allEq(firstmap));
         msgList.addAll(msgList1);
+//        if(msgList.isEmpty()){
+//            return new Result(300,"无历史消息",null);
+//        }
         List<websocketResult> resultList = new ArrayList<>();
         for(Msg m : msgList){
             websocketResult websocketResult = new websocketResult();
-            websocketResult.setType("text");
+            websocketResult.setType(m.getType());
             websocketResult.setMsg(m.getMsg());
             websocketResult.setId(m.getFromid());
             websocketResult.setTime(m.getCreatime());
             resultList.add(websocketResult);
         }
         List<String> ids = msgList.stream().map(Msg::getId).collect(Collectors.toList());
+        if(ids.size()==0){
+            return new Result(300,"无历史消息",null);
+        }
         msgService.update(new LambdaUpdateWrapper<Msg>().set(Msg::getIfsend,1).in(Msg::getId,ids));
 
         return new Result(200,"success",resultList);

@@ -4,7 +4,7 @@
 
 		<div class="avatar" > 
 
-			<img id="pic" src="http://localhost:90/imgs/logo.png">
+			<img id="pic" src="http://localhost:90/imgmsg/imgmsgbb60feae-3031-4e3e-ab3d-bb4c65f8f0fc.jpg">
 
 		</div>
 
@@ -194,7 +194,7 @@ html {
 	width: 150px;
 	height: 150px;
 	overflow: hidden;
-	top: 18px;
+	top: 1px;
 	text-align: center;
 	
 	

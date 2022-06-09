@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.websocket.Session;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,7 +101,7 @@ public class sendMessage {
 
     @SaCheckLogin
     @PostMapping("/img")
-    public Result sendimg(@RequestParam MultipartFile file, @RequestParam String targetId, @RequestHeader String token){
+    public Result sendimg(@RequestParam MultipartFile file, @RequestParam String targetId, @RequestHeader String token) throws IOException {
         //TODO 发送并上传图片
         String id = (String) StpUtil.getLoginIdByToken(token);
         //保存图片
@@ -140,5 +141,8 @@ public class sendMessage {
 
         return new Result(200,"success",msg.getMsg());
     }
+
+
+
 
 }

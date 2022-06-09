@@ -14,20 +14,21 @@ public class SaveFileServiceImpl implements SaveFileService {
 
 
     @Override
-    public boolean saveFile(MultipartFile file,String filename){
+    public boolean saveFile(MultipartFile file,String filename) throws IOException {
         if (file.isEmpty()){
             return false;
         }
 
 
         //文件路径
-        String filePath = "D:\\datas\\imgmsg\\";
+        String filePath = "/opt/homebrew/var/www/imgmsg/";
         File temp = new File(filePath);
         if (!temp.exists()){
             temp.mkdirs();
         }
 
         File localFile = new File(filePath+filename);
+        localFile.createNewFile();
         try {
             file.transferTo(localFile); //把上传的文件保存至本地
             System.out.println(file.getOriginalFilename()+" 上传成功");

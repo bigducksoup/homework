@@ -22,7 +22,8 @@ const store = createStore({
             },
             msglist:[
                 
-            ]
+            ],
+            friendlist:0
 			
 			
         }

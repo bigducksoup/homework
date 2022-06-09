@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.duck.homework.VO.FriendRequest;
 import com.duck.homework.VO.MyFriend;
@@ -25,6 +26,7 @@ import javax.websocket.Session;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -114,6 +116,55 @@ public class UserController {
     }
 
 
+
+
+    @SaCheckLogin
+    @PostMapping("/requestlist")
+    public Result getfriendrequest(@RequestHeader String token){
+        String id = StpUtil.getLoginIdByToken(token).toString();
+        Map<SFunction<Friend,?>,Object> map = new HashMap<>();
+        map.put(Friend::getTargetid,id);
+        map.put(Friend::getBidirectional,0);
+        List<Friend> list = friendService.list(new LambdaQueryWrapper<Friend>().allEq(map));
+        if (list.size()==0){
+            return new Result(400,"no result",null);
+        }
+        List<String> followerids = list.stream().map(Friend::getFollowerid).collect(Collectors.toList());
+        List<WUser> nameAndacc = userService.list(new LambdaQueryWrapper<WUser>().select(WUser::getAccount, WUser::getNickname).in(WUser::getId, followerids));
+        List<FriendRequest> f = new ArrayList<>();
+        for (int i=0;i< list.size();i++){
+            Friend friend = list.get(i);
+            FriendRequest friendRequest = new FriendRequest();
+            friendRequest.setRequesterId(friend.getFollowerid());
+            friendRequest.setRequestTime(friend.getCreatetime());
+            friendRequest.setType("friendReauest");
+            WUser wUser = nameAndacc.get(i);
+            friendRequest.setRequestNickName(wUser.getNickname());
+            friendRequest.setRequesterAccount(wUser.getAccount());
+            f.add(friendRequest);
+        }
+
+        return new Result(200,"success",f);
+
+
+    }
+
+
+
+    @PostMapping("/opeartion")
+    public Result opforrequest(@RequestHeader String token,@RequestParam String targetId,@RequestParam boolean ifacc){
+        String userId = StpUtil.getLoginIdByToken(token).toString();
+        Map<SFunction<Friend,?>,Object> map = new HashMap<>();
+        map.put(Friend::getFollowerid,targetId);
+        map.put(Friend::getTargetid,userId);
+        map.put(Friend::getBidirectional,0);
+        if (ifacc){
+            boolean update = friendService.update(null, new LambdaUpdateWrapper<Friend>().allEq(map).set(Friend::getBidirectional, 1));
+        }else{
+            boolean remove = friendService.remove(new LambdaQueryWrapper<Friend>().allEq(map));
+        }
+        return new Result(200,"success",null);
+    }
 
 
 
