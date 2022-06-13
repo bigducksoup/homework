@@ -73,9 +73,6 @@ public class sendMessage {
         msg1.setType("text");
         msg1.setCreatime(LocalDateTime.now());
         msg1.setId(UUID.randomUUID().toString());
-
-
-
         if (session==null){
             msg1.setIfsend(0);
             boolean save = msgService.save(msg1);

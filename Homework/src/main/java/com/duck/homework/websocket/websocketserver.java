@@ -14,9 +14,6 @@ import javax.websocket.server.ServerEndpoint;
 @Component
 @ServerEndpoint("/connect/{userId}")
 public class websocketserver {
-
-
-
     @OnOpen
     public void onopen(Session session, @PathParam("userId") String userId){
         System.out.println(userId);
@@ -30,9 +27,5 @@ public class websocketserver {
         webSocketUsers.remove(session);
         System.out.println(session+"removed");
     }
-
-
-
-
 
 }

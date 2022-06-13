@@ -69,13 +69,7 @@ const message = (msg: any) => {
 
 	if(msgcontent.type=='text'||msgcontent.type=='img'){
 	store.state.msglist.push(msgcontent);
-
-	//testing
-
 	
-
-
-	//back
 	let m = JSON.parse(msg.data);
 	let msgli = localStorage.getItem(store.state.target.id);
 	if (msgli != null) {

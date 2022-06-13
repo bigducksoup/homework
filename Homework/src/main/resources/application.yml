@@ -5,7 +5,7 @@ spring:
     username: homework
     password: homeworking
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://139.196.147.52:3306/homework?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost/homework?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
 
 
 
